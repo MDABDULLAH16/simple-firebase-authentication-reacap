@@ -2,6 +2,7 @@ import "./App.css";
 import app from "./firebase.init";
 import {
   getAuth,
+  GithubAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -13,9 +14,10 @@ const auth = getAuth(app);
 function App() {
   const [user, setUser] = useState({});
 
-  const provider = new GoogleAuthProvider();
+  const googleProvider = new GoogleAuthProvider();
+  const gitHubProvider = new GithubAuthProvider();
   const handleSignIn = () => {
-    signInWithPopup(auth, provider)
+    signInWithPopup(auth, googleProvider)
       .then((result) => {
         setUser(result.user);
         console.log(result.user);
@@ -24,6 +26,19 @@ function App() {
         console.log(error);
       });
   };
+
+  const handleSignInGithub = () => {
+    signInWithPopup(auth, gitHubProvider)
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+        console.log(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleSignOut = () => {
     signOut(auth)
       .then((result) => {
@@ -37,10 +52,13 @@ function App() {
   return (
     <div className="App">
       <h1>This is app js with authentication</h1>
-      {user.email ? (
+      {user.uid ? (
         <button onClick={handleSignOut}>Sign Out</button>
       ) : (
-        <button onClick={handleSignIn}>Sign in with Google</button>
+        <div>
+          <button onClick={handleSignIn}>Sign in with Google</button>
+          <button onClick={handleSignInGithub}>Sign In with Github</button>
+        </div>
       )}
       <h2>Name: {user.displayName}</h2>
       <p>Email: {user.email}</p>
