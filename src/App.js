@@ -37,8 +37,11 @@ function App() {
   return (
     <div className="App">
       <h1>This is app js with authentication</h1>
-      <button onClick={handleSignIn}>Sign in with Google</button>
-      <button onClick={handleSignOut}>Sign Out</button>
+      {user.email ? (
+        <button onClick={handleSignOut}>Sign Out</button>
+      ) : (
+        <button onClick={handleSignIn}>Sign in with Google</button>
+      )}
       <h2>Name: {user.displayName}</h2>
       <p>Email: {user.email}</p>
       <img referrerPolicy="no-referrer" src={user.photoURL} alt="" />
